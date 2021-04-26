@@ -14,16 +14,28 @@ public class Cart {
         this.itemsList.add(item);
     }
 
-    public double getTotalPrice() {
+    public String getTotalPrice() {
         double totalPrice = 0;
+        String res = "";
+        int quantity = 0;
         for (Item i : this.itemsList) {
             totalPrice += i.price;
+            quantity++;
         }
-        return totalPrice;
+        res = quantity + " item, total price: $" + totalPrice;
+        return res;
     }
 
-    public ArrayList<Item> itemizedList() {
-        return this.itemsList;
+    public ArrayList<String> itemizedList() {
+        ArrayList<String> result = new ArrayList<>();
+
+        for (Item  i : this.itemsList) {
+            String info = "";
+            info = i.name + ": $" + i.price;
+            result.add(info);
+        }
+
+        return result;
     }
 
     public int itemQuantities(Item item) {

@@ -21,17 +21,10 @@ public class CartTest {
         assertIterableEquals(expected, actual, "Initialize with an empty cart");
     }
 
-    @Test
-    public void createItemWithPrice() {
-        Item item = new Item(10.99, false);
-        Double expected = 10.99;
-        Double actual = item.price;
-        assertEquals(expected, actual, "Item is initialized with a price");
-    }
 
     @Test
     public void addItemToCart() {
-        Item item = new Item(10, false);
+        Item item = new Item("Ribs",10, false);
         Cart cart = new Cart();
 
         cart.addToCart(item);
@@ -42,45 +35,59 @@ public class CartTest {
 
     }
 
+
     @Test
-    public void getTotalPrice() {
-        Item item = new Item(12.13, false);
+    public void itemizedListSingleItem(){
         Cart cart = new Cart();
+//        Item item = new Item(200, false);
+        Item item = new Item("Apple", 2.5, false);
 
-        double expected = 12.13;
         cart.addToCart(item);
-        double actual = cart.getTotalPrice();
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("Apple: $2.5");
+        ArrayList<String> actual = cart.itemizedList();
 
-        assertEquals(expected, actual, "Cart knowing total price of items in it");
-
-        Item item1 = new Item(20.99, false);
-
-        expected = 12.13 + 20.99;
-        cart.addToCart(item1);
-        actual = cart.getTotalPrice();
-
-        assertEquals(expected, actual, "Cart knowing total price of items in it");
+        assertEquals(expected, actual, "Should return item name and price for single item in the cart");
     }
 
     @Test
-    public void itemizedList(){
+    public void itemizedListMultipleItems(){
         Cart cart = new Cart();
-        Item item = new Item(200, false);
-        ArrayList<Item> expected = new ArrayList<Item>();
-        expected.add(item);
-
+        Item item = new Item("Apple", 2.5, false);
         cart.addToCart(item);
-        ArrayList<Item> actual = cart.itemizedList();
 
-        assertIterableEquals(expected, actual, "itemizedList should return a list of items in the cart");
+        Item item1 = new Item("Coffee", 3.5, false);
+        cart.addToCart(item1);
 
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("Apple: $2.5");
+        expected.add("Coffee: $3.5");
 
+        ArrayList<String> actual = cart.itemizedList();
+
+        assertEquals(expected, actual, "itemizedList should return string list if having multiple items");
+    }
+
+    @Test
+    public void getTotalPrice() {
+        Cart cart = new Cart();
+
+        Item item = new Item("Ice cream",12.13, false);
+        cart.addToCart(item);
+
+        Item item1 = new Item("Slow cooker",20.99, false);
+        cart.addToCart(item1);
+
+        String expected = "2 item, total price: $33.12";
+        String actual = cart.getTotalPrice();
+
+        assertEquals(expected, actual, "Cart knowing total price and quantity of items in it");
     }
 
     @Test
     public void itemQuantities(){
         Cart cart = new Cart();
-        Item item = new Item(100, false);
+        Item item = new Item("Bag",100, false);
         cart.addToCart(item);
 
         int expected = 1;
@@ -92,7 +99,7 @@ public class CartTest {
     @Test
     public void itemQuantitiesOfThree(){
         Cart cart = new Cart();
-        Item item = new Item(100, false);
+        Item item = new Item("Bag",100, false);
         cart.addToCart(item);
         cart.addToCart(item);
         cart.addToCart(item);
@@ -106,8 +113,8 @@ public class CartTest {
     @Test
     public void variedQuantities(){
         Cart cart = new Cart();
-        Item item1 = new Item(100, false);
-        Item item2 = new Item(30, false);
+        Item item1 = new Item("Bag",100, false);
+        Item item2 = new Item("Flower",30, false);
         cart.addToCart(item1);
         cart.addToCart(item1);
         cart.addToCart(item2);
@@ -121,8 +128,8 @@ public class CartTest {
     @Test
     public void onSaleItems(){
         Cart cart = new Cart();
-        Item item1 = new Item(80.0, true);
-        Item item2 = new Item(600, false);
+        Item item1 = new Item("Headphones",80.0, true);
+        Item item2 = new Item("Iphone",600, false);
 
         cart.addToCart(item1);
         cart.addToCart(item2);
@@ -138,8 +145,8 @@ public class CartTest {
     @Test
     public void onSaleMultipleItems(){
         Cart cart = new Cart();
-        Item item1 = new Item(800.0, true);
-        Item item2 = new Item(6000, false);
+        Item item1 = new Item("Sofa",800.0, true);
+        Item item2 = new Item("Table",6000, false);
 
         cart.addToCart(item1);
         cart.addToCart(item1);
@@ -160,8 +167,8 @@ public class CartTest {
     @Test
     public void onSaleNoItems(){
         Cart cart = new Cart();
-        Item item1 = new Item(800.0, false);
-        Item item2 = new Item(6000, false);
+        Item item1 = new Item("Sofa",800.0, false);
+        Item item2 = new Item("Table",6000, false);
 
         cart.addToCart(item1);
         cart.addToCart(item2);
